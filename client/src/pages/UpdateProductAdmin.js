@@ -1,11 +1,9 @@
-import React, { useState, useEffect, createElement } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useParams, useHistory } from "react-router";
 
 import NavbarAdmin from "../components/NavbarAdmin";
 import CheckBox from "../components/form/CheckBox";
-
-import dataProduct from "../fakeData/product";
 
 // Import useQuery and useMutation
 import { useQuery, useMutation } from "react-query";
@@ -62,13 +60,13 @@ export default function UpdateProductAdmin() {
     const id = e.target.value;
     const checked = e.target.checked;
 
-    if (checked == true) {
+    if (checked === true) {
       // Save category id if checked
       setCategoryId([...categoryId, parseInt(id)]);
     } else {
       // Delete category id from variable if unchecked
       let newCategoryId = categoryId.filter((categoryIdItem) => {
-        return categoryIdItem != id;
+        return categoryIdItem !== id;
       });
       setCategoryId(newCategoryId);
     }
@@ -113,7 +111,7 @@ export default function UpdateProductAdmin() {
       };
 
       // Insert product data
-      const response = await api.patch("/product/" + product.id, config);
+      await api.patch("/product/" + product.id, config);
 
       history.push("/product-admin");
     } catch (error) {
@@ -148,6 +146,7 @@ export default function UpdateProductAdmin() {
                       maxHeight: "150px",
                       objectFit: "cover",
                     }}
+                    alt="product thumbnail"
                   />
                 </div>
               ) : (
@@ -159,6 +158,7 @@ export default function UpdateProductAdmin() {
                       maxHeight: "150px",
                       objectFit: "cover",
                     }}
+                    alt="preview updated thumbnail"
                   />
                 </div>
               )}

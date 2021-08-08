@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useParams, useHistory } from "react-router";
 
 import NavbarAdmin from "../components/NavbarAdmin";
-
-import dataCategory from "../fakeData/category";
 
 // Import useQuery and useMutation
 import { useQuery, useMutation } from "react-query";
@@ -52,7 +50,7 @@ export default function UpdateCategoryAdmin() {
       };
 
       // Insert category data
-      const response = await api.patch("/category/" + id, config);
+      await api.patch("/category/" + id, config);
 
       history.push("/category-admin");
     } catch (error) {

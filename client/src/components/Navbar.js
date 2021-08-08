@@ -1,5 +1,5 @@
-import React, {useContext} from 'react'
-import { Container, Navbar as NavbarComp, Nav, NavDropdown } from 'react-bootstrap'
+import {useContext} from 'react'
+import { Container, Navbar as NavbarComp, Nav } from 'react-bootstrap'
 import {
     Link,
     useHistory

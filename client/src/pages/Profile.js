@@ -1,14 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import dateFormat from "dateformat";
 import convertRupiah from "rupiah-format";
 
 import Navbar from "../components/Navbar";
 
-import imgDumbMerch from "../assets/DumbMerch.png";
-
 import { UserContext } from "../context/userContext";
-import dataTransaction from "../fakeData/transaction";
 
 import imgBlank from "../assets/blank-profile.png";
 
@@ -27,13 +24,13 @@ export default function Profile() {
   const [state] = useContext(UserContext);
 
   // Fetching profile data from database
-  let { data: profile, refetch: profileRefetch } = useQuery(
+  let { data: profile } = useQuery(
     "profileCache",
     async () => {
       const config = {
         method: "GET",
         headers: {
-          Authorization: "Basic " + localStorage.token,
+          Authorization: "Bearer " + localStorage.token,
         },
       };
       const response = await api.get("/profile", config);
@@ -42,7 +39,7 @@ export default function Profile() {
   );
 
   // Fetching transactions data from database
-  let { data: transactions, refetch: transactionsRefetch } = useQuery(
+  let { data: transactions } = useQuery(
     "transactionsCache",
     async () => {
       const config = {
@@ -97,10 +94,10 @@ export default function Profile() {
           </Col>
           <Col md="6">
             <div className="text-header-product mb-4">My Transaction</div>
-            {transactions?.length != 0 ? (
+            {transactions?.length !== 0 ? (
               <>
                 {transactions?.map((item) => (
-                  <div style={{ background: "#303030" }} className="p-2 mb-1">
+                  <div key={item.id} style={{ background: "#303030" }} className="p-2 mb-1">
                     <Container fluid className="px-1">
                       <Row>
                         <Col xs="3">

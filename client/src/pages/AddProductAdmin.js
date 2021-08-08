@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 
@@ -29,7 +29,7 @@ export default function AddProductAdmin() {
   }); //Store product data
 
   // Fetching category data
-  let { data: categories, refetch } = useQuery("categoriesCache", async () => {
+  let { data: categories } = useQuery("categoriesCache", async () => {
     const response = await api.get("/categories");
     return response.data;
   });
@@ -39,13 +39,13 @@ export default function AddProductAdmin() {
     const id = e.target.value;
     const checked = e.target.checked;
 
-    if (checked == true) {
+    if (checked === true) {
       // Save category id if checked
       setCategoryId([...categoryId, parseInt(id)]);
     } else {
       // Delete category id from variable if unchecked
       let newCategoryId = categoryId.filter((categoryIdItem) => {
-        return categoryIdItem != id;
+        return categoryIdItem !== id;
       });
       setCategoryId(newCategoryId);
     }
@@ -55,8 +55,7 @@ export default function AddProductAdmin() {
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name]:
-        e.target.type === "file" ? e.target.files : e.target.value,
+      [e.target.name]: e.target.type === "file" ? e.target.files : e.target.value,
     });
 
     // Create image url for preview
@@ -89,7 +88,7 @@ export default function AddProductAdmin() {
       };
 
       // Insert product data
-      const response = await api.post("/product", config);
+      await api.post("/product", config);
 
       history.push("/product-admin");
     } catch (error) {
@@ -116,17 +115,12 @@ export default function AddProductAdmin() {
                       maxHeight: "150px",
                       objectFit: "cover",
                     }}
+                    alt="preview"
                   />
                 </div>
               )}
-              <input
-                type="file"
-                id="upload"
-                name="image"
-                hidden
-                onChange={handleChange}
-              />
-              <label for="upload" className="label-file-add-product">
+              <input type="file" id="upload" name="image" hidden onChange={handleChange} />
+              <label htmlFor="upload" className="label-file-add-product">
                 Upload file
               </label>
               <input
@@ -158,24 +152,15 @@ export default function AddProductAdmin() {
                 className="input-edit-category mt-4"
               />
               <div className="card-form-input mt-4 px-2 py-1 pb-2">
-                <div
-                  className="text-secondary mb-1"
-                  style={{ fontSize: "15px" }}
-                >
+                <div className="text-secondary mb-1" style={{ fontSize: "15px" }}>
                   Category
                 </div>
-                {categories?.map((item) => (
-                  <label class="checkbox-inline me-4">
-                    <input
-                      type="checkbox"
-                      value={item.id}
-                      onClick={handleChangeCategoryId}
-                    />{" "}
-                    {item.name}
+                {categories?.map((item, index) => (
+                  <label key={index} htmlFor="category" className="checkbox-inline me-4">
+                    <input id="category" type="checkbox" value={item.id} onClick={handleChangeCategoryId} /> {item.name}
                   </label>
                 ))}
               </div>
-
               <div className="d-grid gap-2 mt-4">
                 <Button type="submit" variant="success" size="md">
                   Add

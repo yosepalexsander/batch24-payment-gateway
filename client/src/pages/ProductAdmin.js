@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Container, Row, Col, Table, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 import ShowMoreText from "react-show-more-text";
@@ -9,8 +9,6 @@ import DeleteData from "../components/modal/DeleteData";
 
 import imgEmpty from "../assets/empty.svg";
 
-import dataProduct from "../fakeData/product";
-
 // Import useQuery and useMutation
 import { useQuery, useMutation } from "react-query";
 
@@ -18,12 +16,11 @@ import { useQuery, useMutation } from "react-query";
 import { API } from "../config/api";
 
 export default function ProductAdmin() {
-  let history = useHistory();
-  let api = API();
+  const history = useHistory();
+  const api = API();
 
   // Variabel for delete product data
   const [idDelete, setIdDelete] = useState(null);
-  const [confirmDelete, setConfirmDelete] = useState(null);
 
   // Modal Confirm delete data
   const [show, setShow] = useState(false);
@@ -34,7 +31,7 @@ export default function ProductAdmin() {
   document.title = "DumbMerch | " + title;
 
   // Fetching product data from database
-  let { data: products, refetch } = useQuery("productsCache", async () => {
+  const { data: products, refetch } = useQuery("productsCache", async () => {
     const config = {
       method: "GET",
       headers: {
@@ -75,36 +72,28 @@ export default function ProductAdmin() {
     }
   });
 
-  useEffect(() => {
-    if (confirmDelete) {
-      // Close modal confirm delete data
-      handleClose();
-      // execute delete data by id function
-      deleteById.mutate(idDelete);
-      setConfirmDelete(null);
-    }
-  }, [confirmDelete]);
+  const onConfirmDelete = () => {
+    // execute delete data by id function
+    deleteById.mutate(idDelete);
+    // Close modal confirm delete data
+    handleClose();
+  }
 
   return (
     <>
       <NavbarAdmin title={title} />
-
       <Container className="py-5">
         <Row>
           <Col xs="6">
             <div className="text-header-category mb-4">List Product</div>
           </Col>
           <Col xs="6" className="text-end">
-            <Button
-              onClick={addProduct}
-              className="btn-dark"
-              style={{ width: "100px" }}
-            >
+            <Button onClick={addProduct} className="btn-dark" style={{ width: "100px" }}>
               Add
             </Button>
           </Col>
           <Col xs="12">
-            {products?.length != 0 ? (
+            {products?.length > 0 ? (
               <Table striped hover size="lg" variant="dark">
                 <thead>
                   <tr>
@@ -121,7 +110,7 @@ export default function ProductAdmin() {
                 </thead>
                 <tbody>
                   {products?.map((item, index) => (
-                    <tr>
+                    <tr key={index}>
                       <td className="align-middle text-center">{index + 1}</td>
                       <td className="align-middle">
                         <img
@@ -131,6 +120,7 @@ export default function ProductAdmin() {
                             height: "80px",
                             objectFit: "cover",
                           }}
+                          alt={item.name}
                         />
                       </td>
                       <td className="align-middle">{item.name}</td>
@@ -148,17 +138,15 @@ export default function ProductAdmin() {
                           {item.desc}
                         </ShowMoreText>
                       </td>
-                      <td className="align-middle">
-                        {rupiahFormat.convert(item.price)}
-                      </td>
+                      <td className="align-middle">{rupiahFormat.convert(item.price)}</td>
                       <td className="align-middle">{item.qty}</td>
                       <td className="align-middle">
                         <Button
                           onClick={() => {
                             handleEdit(item.id);
                           }}
-                          className="btn-sm btn-success me-2"
-                          style={{ width: "135px" }}
+                          className="btn-sm btn-info me-2"
+                          style={{ width: "65px" }}
                         >
                           Edit
                         </Button>
@@ -167,7 +155,7 @@ export default function ProductAdmin() {
                             handleDelete(item.id);
                           }}
                           className="btn-sm btn-danger"
-                          style={{ width: "135px" }}
+                          style={{ width: "65px" }}
                         >
                           Delete
                         </Button>
@@ -178,22 +166,14 @@ export default function ProductAdmin() {
               </Table>
             ) : (
               <div className="text-center pt-5">
-                <img
-                  src={imgEmpty}
-                  className="img-fluid"
-                  style={{ width: "40%" }}
-                />
+                <img src={imgEmpty} className="img-fluid" style={{ width: "40%" }} alt="empty" />
                 <div className="mt-3">No data product</div>
               </div>
             )}
           </Col>
         </Row>
       </Container>
-      <DeleteData
-        setConfirmDelete={setConfirmDelete}
-        show={show}
-        handleClose={handleClose}
-      />
+      <DeleteData handleDelete={onConfirmDelete} show={show} handleClose={handleClose} />
     </>
   );
 }

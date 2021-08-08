@@ -1,6 +1,4 @@
-import React, { useContext, useState } from "react";
-import { UserContext } from "../../context/userContext";
-import { useHistory } from "react-router-dom";
+import { useState } from "react";
 import { Alert } from "react-bootstrap";
 
 import { useMutation } from "react-query";
@@ -10,11 +8,7 @@ import { API } from "../../config/api";
 export default function Register() {
   const title = "Register";
   document.title = "DumbMerch | " + title;
-
-  let history = useHistory();
-  let api = API();
-
-  const [state, dispatch] = useContext(UserContext);
+  const api = API();
 
   const [message, setMessage] = useState(null);
   const [form, setForm] = useState({
@@ -54,7 +48,7 @@ export default function Register() {
       console.log(response);
 
       // Notification
-      if (response.status == "success") {
+      if (response.status === "success") {
         const alert = (
           <Alert variant="success" className="py-1">
             Success
@@ -88,10 +82,7 @@ export default function Register() {
   return (
     <div className="d-flex justify-content-center">
       <div className="card-auth p-4">
-        <div
-          style={{ fontSize: "36px", lineHeight: "49px", fontWeight: "700" }}
-          className="mb-2"
-        >
+        <div style={{ fontSize: "36px", lineHeight: "49px", fontWeight: "700" }} className="mb-2">
           Register
         </div>
         {message && message}

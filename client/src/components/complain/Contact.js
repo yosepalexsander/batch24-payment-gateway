@@ -1,8 +1,8 @@
-import React from "react";
+import { memo } from "react";
 
-import default_profile from "../../assets/blank-profile.png"
+import default_profile from "../../assets/blank-profile.png";
 
-export default function Contact({ dataContact, clickContact, contact }) {
+function Contact({ dataContact, clickContact, contact }) {
   return (
     <>
       {dataContact.length > 0 && (
@@ -10,9 +10,7 @@ export default function Contact({ dataContact, clickContact, contact }) {
           {dataContact.map((item) => (
             <div
               key={item.id}
-              className={`contact mt-3 p-2 ${
-                contact?.id === item?.id && "contact-active"
-              }`}
+              className={`contact mt-3 p-2 ${contact?.id === item?.id && "contact-active"}`}
               onClick={() => {
                 clickContact(item);
               }}
@@ -24,9 +22,7 @@ export default function Contact({ dataContact, clickContact, contact }) {
               />
               <div className="ps-1 text-contact d-flex flex-column justify-content-around">
                 <p className="mb-0">{item.name}</p>
-                <p className="text-contact-chat mt-1 mb-0">
-                  {item.message}
-                </p>
+                <p className="text-contact-chat mt-1 mb-0">{item.message}</p>
               </div>
             </div>
           ))}
@@ -35,3 +31,5 @@ export default function Contact({ dataContact, clickContact, contact }) {
     </>
   );
 }
+
+export default memo(Contact);

@@ -1,4 +1,4 @@
-import React, { createElement, useState, useEffect } from "react";
+import { createElement, useState, useEffect } from "react";
 
 export default function CheckBox(props) {
   const { value, handleChangeCategoryId, categoryId } = props;
@@ -6,9 +6,9 @@ export default function CheckBox(props) {
   const [isChecked, setIsChecked] = useState();
 
   const getIsChecked = () => {
-    if (categoryId?.length != 0) {
+    if (categoryId?.length !== 0) {
       categoryId?.every((item) => {
-        if (item == value) {
+        if (item === value) {
           setIsChecked(true);
           return false;
         } else {

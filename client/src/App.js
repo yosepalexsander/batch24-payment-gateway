@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Switch, Route, useHistory } from "react-router-dom";
 import { UserContext } from "./context/userContext";
 
@@ -18,30 +18,16 @@ import UpdateProductAdmin from "./pages/UpdateProductAdmin";
 import { API } from "./config/api";
 
 function App() {
-  let api = API();
-  let history = useHistory();
+  const api = API();
+  const history = useHistory();
   const [state, dispatch] = useContext(UserContext);
-
-  useEffect(() => {
-    // Redirect Auth
-    if (state.isLogin == false) {
-      history.push("/auth");
-    } else {
-      if (state.user.status == "admin") {
-        history.push("/complain-admin");
-        // history.push("/complain-admin");
-      } else if (state.user.status == "customer") {
-        history.push("/");
-      }
-    }
-  }, [state]);
 
   const checkUser = async () => {
     try {
       const config = {
         method: "GET",
         headers: {
-          Authorization: "Basic " + localStorage.token,
+          Authorization: "Bearer " + localStorage.token,
         },
       };
       const response = await api.get("/check-auth", config);
@@ -71,6 +57,20 @@ function App() {
   useEffect(() => {
     checkUser();
   }, []);
+
+  useEffect(() => {
+    // Redirect Auth
+    if (state.isLogin === false) {
+      history.push("/auth");
+    } else {
+      if (state.user.status === "admin") {
+        history.push("/complain-admin");
+        // history.push("/complain-admin");
+      } else if (state.user.status === "customer") {
+        history.push("/");
+      }
+    }
+  }, [state]);
 
   return (
     <Switch>

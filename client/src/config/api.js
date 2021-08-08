@@ -1,5 +1,5 @@
 export const API = () => {
-  const baseUrl = "http://localhost:5000/api/v1";
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const executeAPI = async (endpoint, config) => {
     const response = await fetch(baseUrl + endpoint, config);

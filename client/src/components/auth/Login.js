@@ -10,13 +10,14 @@ import { useMutation } from "react-query";
 import { API } from "../../config/api";
 
 export default function Login() {
+  const history = useHistory();
+  const api = API();
+  
   const title = "Login";
   document.title = "DumbMerch | " + title;
 
-  let history = useHistory();
-  let api = API();
 
-  const [state, dispatch] = useContext(UserContext);
+  const [,dispatch] = useContext(UserContext);
 
   const [message, setMessage] = useState(null);
   const [form, setForm] = useState({
@@ -55,7 +56,7 @@ export default function Login() {
       console.log(response);
 
       // Checking process
-      if (response.status == "success") {
+      if (response.status === "success") {
         // Send data to useContext
         dispatch({
           type: "LOGIN_SUCCESS",
@@ -63,7 +64,7 @@ export default function Login() {
         });
 
         // Status check
-        if (response.data.status == "admin") {
+        if (response.data.status === "admin") {
           history.push("/complain-admin");
         } else {
           history.push("/");

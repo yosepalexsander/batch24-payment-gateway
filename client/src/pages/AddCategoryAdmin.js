@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 
 import NavbarAdmin from "../components/NavbarAdmin";
-
-import dataCategory from "../fakeData/category";
 
 // Import useMutation
 import { useMutation } from "react-query";
