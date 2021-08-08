@@ -62,27 +62,20 @@ const socketIo = (io) => {
             {
               model: profile,
               as: "profile",
-              attributes: {
-                exclude: ["createdAt", "updatedAt"],
-              },
-            },
-            {
-              model: chat,
-              as: "recipientMessage",
-              attributes: {
-                exclude: ["createdAt", "updatedAt", "idRecipient", "idSender"],
-              },
+              attributes: ["image"]
             },
             {
               model: chat,
               as: "senderMessage",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "idRecipient", "idSender"],
+                exclude: ["updatedAt", "idRecipient", "idSender"],
               },
+              order: [["createdAt", "DESC"]],
+              limit: 1
             },
           ],
           attributes: {
-            exclude: ["createdAt", "updatedAt", "password"],
+            exclude: ["createdAt", "updatedAt", "password", "email"],
           },
         });
 
@@ -90,7 +83,6 @@ const socketIo = (io) => {
         customerContacts = customerContacts.map((item) => ({
           ...item,
           profile: {
-            ...item.profile,
             image: item.profile?.image
               ? process.env.PATH_FILE + item.profile?.image
               : null,
@@ -105,7 +97,6 @@ const socketIo = (io) => {
 
     // define listener on event load messages
     socket.on("load messages", async (payload) => {
-      console.log("load messages", payload);
       try {
         const token = socket.handshake.auth.token;
 
