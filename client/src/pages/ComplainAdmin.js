@@ -56,9 +56,6 @@ export default function ComplainAdmin() {
               : "Click here to start message",
           })
         );
-
-        console.log("contacts", dataContacts);
-        
         setContacts(dataContacts);
       });
     };
